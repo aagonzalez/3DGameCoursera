@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d0b14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>TarotVida — Tu momento revelado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d0b14;
+  --bg2:#13101f;
+  --bg3:#1a1629;
+  --gold:#c9a84c;
+  --gold2:#e8c97a;
+  --gold3:#f5e4b3;
+  --gold-dim:#6b5520;
+  --cream:#f0e8d5;
+  --purple:#6b4fa0;
+  --purple2:#9b7fd4;
+  --rose:#c4627a;
+  --teal:#3d9e8c;
+  --text:#e8dfc8;
+  --text-dim:#8a7f6a;
+  --border:rgba(201,168,76,0.2);
+  --border-bright:rgba(201,168,76,0.5);
+  --card-w:120px;
+  --card-h:211px;
+  --nav-h:64px;
+}
+
+/* FIX: body no bloquea scroll — cada pantalla maneja el suyo */
+html{height:100%;background:var(--bg)}
+body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:16px;position:relative}
+
+/* Stars */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:var(--min);transform:scale(1)}50%{opacity:var(--max);transform:scale(1.4)}}
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 40% at 50% -10%,rgba(107,79,160,0.25) 0%,transparent 70%),
+             radial-gradient(ellipse 40% 30% at 80% 110%,rgba(61,158,140,0.1) 0%,transparent 60%),
+             radial-gradient(ellipse 40% 30% at 20% 110%,rgba(196,98,122,0.1) 0%,transparent 60%)}
+
+/* FIX: screens use their own scroll container */
+.screen{
+  position:fixed;inset:0;z-index:10;
+  display:flex;flex-direction:column;align-items:center;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+}
+.screen.hidden{display:none!important}
+
+/* ===== HOME ===== */
+#home{justify-content:space-between;padding:40px 0 20px}
+.home-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem 0;width:100%}
+.logo-wrap{text-align:center;margin-bottom:1.5rem}
+.logo-symbol{font-size:3rem;line-height:1;display:block;margin-bottom:0.5rem;filter:drop-shadow(0 0 20px rgba(201,168,76,0.6));animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.logo-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,6vw,2.2rem);color:var(--gold2);letter-spacing:0.05em;line-height:1.1;text-shadow:0 0 30px rgba(201,168,76,0.4)}
+.logo-sub{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.25em;color:var(--text-dim);margin-top:0.5rem;text-transform:uppercase}
+.divider{display:flex;align-items:center;gap:0.75rem;color:var(--gold-dim);font-size:0.9rem;margin:1.25rem 0;width:100%;max-width:280px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border-bright),transparent)}
+.tagline{text-align:center;font-style:italic;color:var(--text-dim);font-size:1rem;line-height:1.6;max-width:260px;margin-bottom:1.5rem}
+.home-bottom{width:100%;padding:0 1.5rem 1rem}
+.floating-cards{display:flex;justify-content:center;margin:0.75rem 0 1.25rem;height:80px;position:relative;width:100%}
+.mini-card{width:48px;height:76px;border-radius:6px;background:linear-gradient(135deg,#1a1235,#2d1f5e);border:1px solid var(--border);position:absolute;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
+.mini-card:nth-child(1){left:50%;transform:translateX(-80px) rotate(-12deg);animation:cf1 3s ease-in-out infinite}
+.mini-card:nth-child(2){left:50%;transform:translateX(-24px) rotate(-3deg);animation:cf2 3.5s ease-in-out infinite 0.5s;z-index:2;background:linear-gradient(135deg,#1f1540,#351f6e);border-color:var(--border-bright)}
+.mini-card:nth-child(3){left:50%;transform:translateX(32px) rotate(8deg);animation:cf3 4s ease-in-out infinite 1s}
+.mini-card .cbp{width:100%;height:100%;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;opacity:0.7}
+@keyframes cf1{0%,100%{transform:translateX(-80px) rotate(-12deg) translateY(0)}50%{transform:translateX(-80px) rotate(-10deg) translateY(-6px)}}
+@keyframes cf2{0%,100%{transform:translateX(-24px) rotate(-3deg) translateY(0)}50%{transform:translateX(-24px) rotate(-1deg) translateY(-10px)}}
+@keyframes cf3{0%,100%{transform:translateX(32px) rotate(8deg) translateY(0)}50%{transform:translateX(32px) rotate(10deg) translateY(-5px)}}
+
+/* Buttons */
+.btn-main{width:100%;max-width:320px;display:block;margin:0 auto 0.75rem;padding:1rem 2rem;
+  background:linear-gradient(135deg,#1e1630,#2a1f4a);border:1px solid var(--border-bright);
+  border-radius:12px;color:var(--gold2);font-family:'Cinzel',serif;font-size:1rem;
+  letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;text-align:center;position:relative;overflow:hidden}
+.btn-main:active{transform:scale(0.97);background:rgba(107,79,160,0.3)}
+.btn-secondary{width:100%;max-width:320px;display:block;margin:0 auto;padding:0.8rem 2rem;
+  background:transparent;border:1px solid var(--border);border-radius:12px;
+  color:var(--text-dim);font-family:'Cinzel',serif;font-size:0.85rem;letter-spacing:0.08em;
+  cursor:pointer;transition:all 0.3s;text-align:center}
+.btn-secondary:active{background:rgba(255,255,255,0.04)}
+
+/* ===== SELECT SPREAD ===== */
+/* FIX: screen has bottom padding for nav, content scrolls freely */
+#select-spread{align-items:stretch;padding:40px 0 calc(var(--nav-h) + 16px)}
+.screen-header{display:flex;align-items:center;gap:1rem;padding:0.5rem 1.25rem 1rem;flex-shrink:0}
+.btn-back{background:none;border:none;color:var(--gold);font-size:1.4rem;cursor:pointer;padding:0.25rem;flex-shrink:0}
+.screen-title{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold2);letter-spacing:0.1em}
+.screen-body{padding:0 1.25rem;flex:1;width:100%}
+.section-lbl{font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;margin-bottom:0.875rem}
+.situation-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.75rem}
+.situation-btn{padding:0.875rem 0.6rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-family:'EB Garamond',serif;font-size:0.92rem;
+  cursor:pointer;transition:all 0.25s;text-align:center;display:flex;flex-direction:column;gap:0.25rem;align-items:center}
+.sit-icon{font-size:1.4rem}
+.situation-btn.active{background:rgba(107,79,160,0.2);border-color:var(--purple2);color:var(--gold2)}
+.spread-options{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem}
+.spread-opt{padding:0.875rem 1rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:0.875rem}
+.spread-opt.active{background:rgba(201,168,76,0.07);border-color:var(--border-bright)}
+.spread-num{font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--gold);min-width:26px;text-align:center}
+.spread-info{flex:1}
+.spread-name{font-family:'Cinzel',serif;font-size:0.9rem;color:var(--cream);margin-bottom:0.1rem}
+.spread-desc{font-size:0.8rem;color:var(--text-dim);font-style:italic}
+.spread-dots{display:flex;gap:3px;align-items:center}
+.sdot{width:7px;height:11px;border-radius:2px;background:var(--border-bright)}
+.sdot.hi{background:var(--gold2)}
+
+/* ===== READING ===== */
+/* FIX: reading screen scrolls its content, padding bottom for nav */
+#reading{align-items:stretch;padding:40px 0 calc(var(--nav-h) + 16px)}
+.reading-header{display:flex;align-items:center;gap:1rem;padding:0.5rem 1.25rem 0.5rem;flex-shrink:0}
+.sit-chip{background:rgba(107,79,160,0.2);border:1px solid rgba(155,127,212,0.3);border-radius:20px;
+  padding:0.28rem 0.75rem;font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.1em;color:var(--purple2)}
+
+/* Shuffle */
+.shuffle-area{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;padding:1.5rem 1rem;min-height:320px}
+.shuffle-count{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold2);
+  text-align:center;margin-bottom:0.75rem;min-height:2.2rem}
+.deck-wrap{position:relative;width:var(--card-w);height:var(--card-h);margin:0 auto 1.75rem;cursor:pointer}
+.deck-shad{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:75%;height:18px;background:rgba(107,79,160,0.3);border-radius:50%;filter:blur(10px)}
+.deck-card{position:absolute;width:var(--card-w);height:var(--card-h);border-radius:11px;
+  background:linear-gradient(145deg,#1a1235,#2a1a55);border:1px solid var(--border-bright);
+  box-shadow:0 4px 20px rgba(0,0,0,0.6)}
+.deck-card:nth-child(2){transform:translateY(-3px) translateX(-2px) rotate(-1deg)}
+.deck-card:nth-child(3){transform:translateY(-6px) translateX(-4px) rotate(-2deg)}
+.deck-card:nth-child(4){transform:translateY(-9px) translateX(-6px) rotate(-3deg)}
+.deck-top{transform:translateY(-12px) translateX(-8px) rotate(-4deg);
+  display:flex;align-items:center;justify-content:center;transition:transform 0.1s}
+.deck-top.shuffling{animation:shuffleAnim 0.55s ease-in-out}
+@keyframes shuffleAnim{
+  0%{transform:translateY(-12px) translateX(-8px) rotate(-4deg)}
+  30%{transform:translateY(-50px) translateX(70px) rotate(18deg)}
+  70%{transform:translateY(-50px) translateX(-80px) rotate(-18deg)}
+  100%{transform:translateY(-12px) translateX(-8px) rotate(-4deg)}
+}
+.deck-glyph{font-size:2.8rem;opacity:0.25}
+.shuffle-instr{font-family:'Cinzel',serif;font-size:0.82rem;letter-spacing:0.1em;color:var(--gold);
+  text-align:center;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.65}50%{opacity:1}}
+.shuffle-sub{font-size:0.8rem;color:var(--text-dim);text-align:center;margin-top:0.4rem;font-style:italic}
+
+/* Reveal area */
+.reveal-wrap{padding:0 1rem;width:100%}
+.reveal-instr{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.15em;
+  color:var(--text-dim);text-align:center;margin-bottom:1rem;text-transform:uppercase}
+.cards-row{display:flex;justify-content:center;gap:0.6rem;margin-bottom:0.75rem;flex-wrap:wrap;width:100%}
+
+/* Tarot card flip */
+.tarot-card{width:var(--card-w);height:var(--card-h);position:relative;cursor:pointer;
+  perspective:900px;flex-shrink:0}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transition:transform 0.65s cubic-bezier(0.4,0,0.2,1)}
+.tarot-card.flipped .card-inner{transform:rotateY(180deg)}
+.card-face{position:absolute;inset:0;border-radius:11px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.card-back-f{background:linear-gradient(145deg,#1a1235,#2a1a55);border:1px solid var(--border-bright);
+  display:flex;align-items:center;justify-content:center;font-size:2.2rem;
+  box-shadow:0 8px 28px rgba(0,0,0,0.65)}
+.card-back-f::before{content:'';position:absolute;inset:7px;border:1px solid rgba(201,168,76,0.15);border-radius:7px}
+.card-front-f{background:var(--bg3);border:2px solid var(--border-bright);
+  transform:rotateY(180deg);display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 12px 36px rgba(0,0,0,0.7);border-radius:11px;position:relative}
+/* Image fills the entire card face */
+.card-img{width:100%;height:100%;object-fit:cover;display:block;border-radius:9px}
+/* Fallback when no image: symbol centered */
+.card-art{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:linear-gradient(145deg,#1a1235,#2d1f55)}
+.card-art-border{position:absolute;inset:5px;border:1px solid rgba(201,168,76,0.15);border-radius:7px;pointer-events:none}
+.card-sym{font-size:2.8rem;line-height:1;filter:drop-shadow(0 0 12px rgba(201,168,76,0.4))}
+/* Name strip overlaid at bottom of image */
+.card-strip{position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,0.85));
+  padding:1rem 0.25rem 0.3rem;text-align:center}
+.card-roman{font-family:'Cinzel',serif;font-size:0.5rem;color:var(--gold-dim);letter-spacing:0.15em;display:block;margin-bottom:1px}
+.card-cname{font-family:'Cinzel',serif;font-size:0.58rem;color:var(--gold2);letter-spacing:0.04em;line-height:1.2}
+.pos-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-dim);text-align:center;margin-top:0.35rem;text-transform:uppercase}
+
+/* FIX: tap hint always visible, hidden via JS not CSS */
+.tap-hint{font-size:0.75rem;color:var(--text-dim);font-style:italic;text-align:center;padding:0.5rem 0 0.25rem}
+
+/* Interpretation */
+.interp-panel{padding:0.75rem 1rem;margin-top:0.5rem;display:none;animation:fadeUp 0.35s ease}
+.interp-panel.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.iph{display:flex;align-items:flex-start;gap:0.875rem;margin-bottom:0.875rem}
+.ip-sym{font-size:2.2rem;filter:drop-shadow(0 0 10px rgba(201,168,76,0.3));flex-shrink:0}
+.ip-titles{flex:1;min-width:0}
+.ip-pos{font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:0.18em;color:var(--purple2);text-transform:uppercase;margin-bottom:0.1rem}
+.ip-name{font-family:'Cinzel',serif;font-size:1.05rem;color:var(--gold2)}
+.ip-div{height:1px;background:linear-gradient(90deg,transparent,var(--border-bright),transparent);margin:0.6rem 0}
+.ip-keys{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.6rem}
+.kw{background:rgba(107,79,160,0.15);border:1px solid rgba(155,127,212,0.2);border-radius:20px;
+  padding:0.18rem 0.55rem;font-size:0.72rem;color:var(--purple2);font-family:'Cinzel',serif;letter-spacing:0.05em}
+.ip-desc{font-size:0.95rem;line-height:1.7;color:var(--text);font-style:italic}
+.ip-msg{margin-top:0.65rem;padding:0.8rem;background:rgba(201,168,76,0.06);border:1px solid var(--border);
+  border-radius:9px;font-size:0.88rem;line-height:1.6;color:var(--cream)}
+
+/* Full reading button */
+.full-btn-wrap{padding:0.75rem 1rem}
+.full-reading-btn{width:100%;padding:0.9rem;background:linear-gradient(135deg,#1e1630,#2a1f4a);
+  border:1px solid var(--border-bright);border-radius:12px;color:var(--gold2);font-family:'Cinzel',serif;
+  font-size:0.88rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.3s;display:block}
+.full-reading-btn:active{transform:scale(0.97);background:rgba(107,79,160,0.25)}
+
+/* Full reading content */
+.full-reading{padding:0.5rem 1rem 1rem;display:none}
+.full-reading.show{display:block}
+.fr-title{font-family:'Cinzel Decorative',serif;font-size:0.95rem;color:var(--gold);
+  margin-bottom:1.25rem;text-align:center;letter-spacing:0.05em}
+.crb{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.crb:last-of-type{border-bottom:none}
+.crb-h{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.6rem}
+.crb-sym{font-size:1.6rem;flex-shrink:0}
+.crb-pos{font-family:'Cinzel',serif;font-size:0.6rem;color:var(--purple2);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.1rem}
+.crb-name{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--gold2)}
+.crb-desc{font-size:0.9rem;line-height:1.7;color:var(--text);font-style:italic;margin-bottom:0.45rem}
+.crb-msg{font-size:0.85rem;line-height:1.6;color:var(--cream);background:rgba(201,168,76,0.05);
+  padding:0.65rem;border-radius:8px;border-left:2px solid var(--gold-dim)}
+.conclusion{background:rgba(107,79,160,0.1);border:1px solid rgba(155,127,212,0.2);
+  border-radius:12px;padding:1rem 1.1rem;margin-top:0.75rem}
+.concl-title{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.2em;color:var(--purple2);
+  text-transform:uppercase;margin-bottom:0.6rem;text-align:center}
+.concl-text{font-size:0.92rem;line-height:1.7;color:var(--cream);text-align:center;font-style:italic}
+.action-btns{display:flex;flex-direction:column;gap:0.5rem;padding:1rem 0 0.5rem}
+.ab{padding:0.8rem;border-radius:11px;font-family:'Cinzel',serif;font-size:0.82rem;
+  letter-spacing:0.08em;cursor:pointer;transition:all 0.25s;width:100%;text-align:center}
+.ab:active{transform:scale(0.97)}
+.ab-save{background:rgba(61,158,140,0.1);border:1px solid rgba(61,158,140,0.3);color:#6ec9b9}
+.ab-new{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
+
+/* ===== NAV ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(13,11,20,0.96);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  height:var(--nav-h);display:flex;justify-content:space-around;align-items:center}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.4rem 1.2rem;
+  background:none;border:none;color:var(--text-dim);font-family:'Cinzel',serif;
+  font-size:0.58rem;letter-spacing:0.1em;cursor:pointer;transition:color 0.3s}
+.nav-btn.active{color:var(--gold)}
+.nav-icon{font-size:1.15rem;line-height:1}
+
+/* ===== JOURNAL ===== */
+#journal{align-items:stretch;padding:40px 1.25rem calc(var(--nav-h) + 16px)}
+.journal-hdr{margin-bottom:1.25rem;padding-top:0.5rem;flex-shrink:0}
+.journal-title{font-family:'Cinzel Decorative',serif;font-size:1.15rem;color:var(--gold2);margin-bottom:0.2rem}
+.journal-sub{font-size:0.85rem;color:var(--text-dim);font-style:italic}
+.j-empty{text-align:center;padding:3rem 1rem;color:var(--text-dim);font-style:italic}
+.j-empty .ei{font-size:2.5rem;display:block;margin-bottom:0.875rem;opacity:0.4}
+.j-entry{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:0.875rem;margin-bottom:0.65rem}
+.je-date{font-family:'Cinzel',serif;font-size:0.62rem;color:var(--gold-dim);letter-spacing:0.15em;margin-bottom:0.4rem}
+.je-sit{font-size:0.78rem;color:var(--purple2);font-family:'Cinzel',serif;letter-spacing:0.05em;margin-bottom:0.4rem}
+.je-cards{display:flex;gap:0.4rem;flex-wrap:wrap}
+.je-card{background:rgba(107,79,160,0.15);border:1px solid rgba(155,127,212,0.2);
+  border-radius:6px;padding:0.25rem 0.55rem;font-size:0.76rem;color:var(--cream)}
+.j-clear-btn{width:100%;padding:0.6rem;background:rgba(163,45,45,0.1);border:1px solid rgba(163,45,45,0.25);
+  border-radius:9px;color:#d07070;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-top:0.5rem}
+.j-clear-btn:active{background:rgba(163,45,45,0.2)}
+
+/* ===== GUIDE ===== */
+#guide{align-items:stretch;padding:40px 1.25rem calc(var(--nav-h) + 16px)}
+.guide-title{font-family:'Cinzel Decorative',serif;font-size:1.05rem;color:var(--gold2);margin-bottom:0.25rem;padding-top:0.5rem;flex-shrink:0}
+.guide-intro{font-size:0.88rem;color:var(--text-dim);font-style:italic;margin-bottom:1.25rem;line-height:1.6;flex-shrink:0}
+.arcana-list{display:flex;flex-direction:column;gap:0.55rem;width:100%}
+.arc-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:0.8rem;display:flex;gap:0.75rem;align-items:flex-start;cursor:pointer;
+  transition:border-color 0.25s;user-select:none}
+.arc-item.open{border-color:var(--border-bright)}
+.arc-sym{font-size:1.5rem;min-width:30px;text-align:center;flex-shrink:0;line-height:1.3}
+.arc-main{flex:1;min-width:0}
+.arc-row{display:flex;justify-content:space-between;align-items:center;gap:0.5rem}
+.arc-name{font-family:'Cinzel',serif;font-size:0.87rem;color:var(--gold2)}
+.arc-chev{color:var(--gold-dim);transition:transform 0.3s;font-size:0.75rem;flex-shrink:0}
+.arc-item.open .arc-chev{transform:rotate(180deg)}
+.arc-kws{font-size:0.76rem;color:var(--purple2);margin-top:0.1rem}
+.arc-desc{font-size:0.83rem;color:var(--text-dim);line-height:1.6;margin-top:0.55rem;font-style:italic;display:none}
+.arc-item.open .arc-desc{display:block}
+
+/* Toast */
+.toast{position:fixed;bottom:calc(var(--nav-h) + 12px);left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:rgba(107,79,160,0.92);border:1px solid var(--border-bright);border-radius:20px;
+  padding:0.45rem 1.1rem;font-family:'Cinzel',serif;font-size:0.78rem;color:var(--gold2);
+  pointer-events:none;opacity:0;transition:all 0.35s;z-index:200;white-space:nowrap;
+  backdrop-filter:blur(10px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Card reveal animation */
+@keyframes cReveal{from{opacity:0;transform:scale(0.82) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.c-reveal{animation:cReveal 0.4s ease both}
+</style>
+</head>
+<body>
+
+<div class="stars" id="starsEl"></div>
+<div class="ambient"></div>
+<div class="toast" id="toast"></div>
+
+<!-- HOME -->
+<div class="screen" id="home">
+  <div class="home-top">
+    <div class="logo-wrap">
+      <span class="logo-symbol">☽◯☾</span>
+      <h1 class="logo-title">TarotVida</h1>
+      <p class="logo-sub">Tu momento revelado</p>
+    </div>
+    <div class="floating-cards">
+      <div class="mini-card"><div class="cbp">✦</div></div>
+      <div class="mini-card"><div class="cbp">☽</div></div>
+      <div class="mini-card"><div class="cbp">✦</div></div>
+    </div>
+    <div class="divider">✦</div>
+    <p class="tagline">Las cartas tienen un mensaje para vos. Descubrí qué te dice el tarot sobre tu momento de vida.</p>
+  </div>
+  <div class="home-bottom">
+    <button class="btn-main" onclick="goNewReading()">✦ Iniciar mi lectura ✦</button>
+    <button class="btn-secondary" onclick="goScreen('guide');setNav('guide')">Ver guía de cartas</button>
+  </div>
+</div>
+
+<!-- SELECT SPREAD -->
+<div class="screen hidden" id="select-spread">
+  <div class="screen-header">
+    <button class="btn-back" onclick="goScreen('home');hideNav()">←</button>
+    <span class="screen-title">Nueva lectura</span>
+  </div>
+  <div class="screen-body">
+    <p class="section-lbl">¿Sobre qué área de tu vida?</p>
+    <div class="situation-grid">
+      <button class="situation-btn active" onclick="selectSit(this,'amor')"><span class="sit-icon">♥</span>Amor & relaciones</button>
+      <button class="situation-btn" onclick="selectSit(this,'trabajo')"><span class="sit-icon">✦</span>Trabajo & dinero</button>
+      <button class="situation-btn" onclick="selectSit(this,'decision')"><span class="sit-icon">⚖</span>Una decisión</button>
+      <button class="situation-btn" onclick="selectSit(this,'general')"><span class="sit-icon">☽</span>Mi camino</button>
+      <button class="situation-btn" onclick="selectSit(this,'energia')"><span class="sit-icon">◈</span>Energía de hoy</button>
+      <button class="situation-btn" onclick="selectSit(this,'salud')"><span class="sit-icon">❋</span>Bienestar</button>
+    </div>
+    <p class="section-lbl">Tipo de tirada</p>
+    <div class="spread-options">
+      <div class="spread-opt active" onclick="selectSpread(this,1)">
+        <span class="spread-num">I</span>
+        <div class="spread-info">
+          <div class="spread-name">Carta del momento</div>
+          <div class="spread-desc">Un mensaje directo para ahora</div>
+        </div>
+        <div class="spread-dots"><div class="sdot hi"></div></div>
+      </div>
+      <div class="spread-opt" onclick="selectSpread(this,3)">
+        <span class="spread-num">III</span>
+        <div class="spread-info">
+          <div class="spread-name">Pasado · Presente · Futuro</div>
+          <div class="spread-desc">El hilo de tu situación</div>
+        </div>
+        <div class="spread-dots"><div class="sdot"></div><div class="sdot hi"></div><div class="sdot"></div></div>
+      </div>
+      <div class="spread-opt" onclick="selectSpread(this,5)">
+        <span class="spread-num">V</span>
+        <div class="spread-info">
+          <div class="spread-name">Cruz celta simplificada</div>
+          <div class="spread-desc">Lectura profunda y completa</div>
+        </div>
+        <div class="spread-dots"><div class="sdot"></div><div class="sdot"></div><div class="sdot hi"></div><div class="sdot"></div><div class="sdot"></div></div>
+      </div>
+    </div>
+    <button class="btn-main" onclick="startReading()" style="margin-bottom:1rem">Barajar las cartas →</button>
+  </div>
+</div>
+
+<!-- READING -->
+<div class="screen hidden" id="reading">
+  <div class="reading-header">
+    <button class="btn-back" onclick="goNewReading()">←</button>
+    <span class="sit-chip" id="sitChip">Amor</span>
+  </div>
+
+  <!-- Phase 1: Shuffle -->
+  <div id="shufflePhase" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:1.5rem 1rem">
+    <div class="shuffle-count" id="shuffleCount"></div>
+    <div class="deck-wrap" id="deckWrap" onclick="shuffleDeck()">
+      <div class="deck-shad"></div>
+      <div class="deck-card"></div>
+      <div class="deck-card"></div>
+      <div class="deck-card"></div>
+      <div class="deck-card deck-top" id="deckTop">
+        <img src="cartas/19-TheSun.png" alt="Mazo" 
+          style="width:100%;height:100%;object-fit:cover;border-radius:10px;opacity:0.5"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="deck-glyph" style="display:none;position:absolute">✦</div>
+      </div>
+    </div>
+    <p class="shuffle-instr">Tocá el mazo para barajar</p>
+    <p class="shuffle-sub">Pensá en tu situación mientras barajás</p>
+  </div>
+
+  <!-- Phase 2: Reveal -->
+  <div id="revealPhase" style="display:none;width:100%">
+    <div class="reveal-wrap">
+      <p class="reveal-instr">Tocá cada carta para revelarla</p>
+      <div class="cards-row" id="cardsRow"></div>
+      <p class="tap-hint" id="tapHint"></p>
+    </div>
+    <!-- Interpretation of tapped card -->
+    <div class="interp-panel" id="interpPanel"></div>
+    <!-- Full reading button -->
+    <div class="full-btn-wrap" id="fullBtnWrap" style="display:none">
+      <button class="full-reading-btn" onclick="showFullReading()">✦ Ver la lectura completa ✦</button>
+    </div>
+    <!-- Full reading content -->
+    <div class="full-reading" id="fullReading"></div>
+  </div>
+</div>
+
+<!-- JOURNAL -->
+<div class="screen hidden" id="journal">
+  <div class="journal-hdr">
+    <h2 class="journal-title">Mi diario</h2>
+    <p class="journal-sub">Tus lecturas guardadas</p>
+  </div>
+  <div id="journalContent" style="width:100%"></div>
+</div>
+
+<!-- GUIDE -->
+<div class="screen hidden" id="guide">
+  <h2 class="guide-title">Guía de Arcanos Mayores</h2>
+  <p class="guide-intro">Las 22 cartas que revelan los grandes arquetipos de tu vida. Tocá cada una para conocer su mensaje.</p>
+  <div class="arcana-list" id="arcList"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav" style="display:none">
+  <button class="nav-btn active" id="nv-reading" onclick="goNewReading();setNav('reading')">
+    <span class="nav-icon">✦</span>Lectura
+  </button>
+  <button class="nav-btn" id="nv-journal" onclick="goScreen('journal');setNav('journal');renderJournal()">
+    <span class="nav-icon">☽</span>Diario
+  </button>
+  <button class="nav-btn" id="nv-guide" onclick="goScreen('guide');setNav('guide')">
+    <span class="nav-icon">◈</span>Guía
+  </button>
+</nav>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const ARCANA=[
+  {id:0,name:'El Loco',roman:'0',sym:'🃏',kws:['inicio','aventura','libertad','salto al vacío'],
+   desc:'El Loco representa el comienzo de un viaje sin mapa. Es la energía pura de quien da el primer paso con el corazón, sin miedo a lo desconocido.',
+   msgs:{amor:'El amor llega cuando te permitís ser auténtica, sin guiones. Dejá ir el control.',trabajo:'Una oportunidad inesperada se presenta. La intuición te guía más que el análisis.',decision:'El universo te invita a dar el salto. La duda es normal, pero el momento es ahora.',general:'Estás en el umbral de algo nuevo. Confiá en el camino aunque no veas el destino.',energia:'Tu energía es fresca y libre. Ideal para comenzar algo que postergaste.',salud:'Tu cuerpo pide aventura y movimiento. Salí de la rutina.'}},
+  {id:1,name:'El Mago',roman:'I',sym:'🎩',kws:['voluntad','manifestación','habilidad','poder'],
+   desc:'El Mago tiene todo lo que necesita. Representa la capacidad de convertir la intención en realidad a través de la acción enfocada.',
+   msgs:{amor:'Tenés el poder de crear la relación que deseás. La clave está en la comunicación clara.',trabajo:'Tus habilidades son más valiosas de lo que creés. Es momento de mostrarte.',decision:'Tenés más recursos de los que percibís. Confiá en tu capacidad para ejecutar.',general:'El universo te dice: ya tenés todo lo necesario. ¿Por qué esperás?',energia:'Hoy tu energía es magnética. Usala para manifestar algo concreto.',salud:'Tu mente tiene un impacto enorme en tu bienestar. Pensá con intención.'}},
+  {id:2,name:'La Suma Sacerdotisa',roman:'II',sym:'🌙',kws:['intuición','misterio','sabiduría interior','paciencia'],
+   desc:'La Suma Sacerdotisa custodia los secretos del inconsciente. Invita a confiar en la voz silenciosa que sabe más de lo que creemos.',
+   msgs:{amor:'Algo no se dice pero se siente. Prestá atención a lo que no se habla.',trabajo:'La respuesta está dentro tuyo. No busques más opiniones externas.',decision:'Esperá. No todas las respuestas llegan a la velocidad del pensamiento.',general:'Hay información que todavía no tenés. Que la incertidumbre no te paralice.',energia:'Día para ir hacia adentro. Meditá, escribí, observá.',salud:'Tu cuerpo te habla. Aprendé a escucharlo antes de que tenga que gritar.'}},
+  {id:3,name:'La Emperatriz',roman:'III',sym:'🌸',kws:['abundancia','fertilidad','creatividad','amor propio'],
+   desc:'La Emperatriz es la energía de la creación en su estado más generoso. Todo florece a su alrededor porque ella sabe cuidar.',
+   msgs:{amor:'El amor que das y recibís está en expansión. Permití que la ternura fluya.',trabajo:'La creatividad y la abundancia están disponibles. Cultivá lo que ya sembraste.',decision:'Elegí la opción que nutre tu bienestar y el de quienes amás.',general:'La vida te ofrece un período de crecimiento. ¿Estás lista para recibirlo?',energia:'Energía creativa y fértil. Ideal para crear, diseñar, cocinar, cuidar.',salud:'Tu cuerpo necesita nutrición y amor. Tratate como lo que sos: un ser que merece florecer.'}},
+  {id:4,name:'El Emperador',roman:'IV',sym:'⚡',kws:['autoridad','estructura','logro','paternidad'],
+   desc:'El Emperador construye con disciplina y claridad. Representa la capacidad de crear orden donde había caos y proteger lo que se ama.',
+   msgs:{amor:'La relación necesita más estructura y comunicación directa. Establecé límites con amor.',trabajo:'Es momento de liderar, no de seguir. Tu visión merece ser implementada.',decision:'Analizá los hechos, establecé un plan y ejecutalo. La lógica es tu aliada.',general:'Tomá el control de las áreas de tu vida que estaban a la deriva.',energia:'Energía práctica y constructiva. Día para organizar y avanzar.',salud:'La rutina y la constancia son tus mejores medicinas ahora.'}},
+  {id:5,name:'El Sumo Sacerdote',roman:'V',sym:'🗝',kws:['tradición','guía','conocimiento','comunidad'],
+   desc:'El Sumo Sacerdote conecta lo divino con lo humano. Sugiere buscar consejo sabio y honrar los valores que te dieron raíces.',
+   msgs:{amor:'La relación puede beneficiarse de hablar con alguien de confianza. No todo se resuelve solos.',trabajo:'Buscá mentoría o formación. Hay conocimiento que vale la pena adquirir.',decision:'Consultá con alguien que ya pasó por algo similar. La experiencia ajena es un tesoro.',general:'Un período de aprendizaje y crecimiento espiritual está disponible.',energia:'Día para conectar con tu lado espiritual o filosófico.',salud:'La salud emocional se nutre de comunidad y pertenencia.'}},
+  {id:6,name:'Los Enamorados',roman:'VI',sym:'♥',kws:['elección','amor','valores','unión'],
+   desc:'Los Enamorados van más allá del romance: representan la elección fundamental de vivir en alineación con tus valores más profundos.',
+   msgs:{amor:'Una elección importante está en el horizonte. Elegí desde el amor, no desde el miedo.',trabajo:'Tus valores y tu trabajo necesitan estar más alineados. ¿Te sentís plena en lo que hacés?',decision:'La decisión correcta es la que te acerca a quien realmente sos.',general:'Un momento de alineación personal. Identificá qué es realmente importante para vos.',energia:'Energía de amor y conexión. Nutrila con relaciones genuinas.',salud:'El bienestar físico y emocional están profundamente conectados hoy.'}},
+  {id:7,name:'El Carro',roman:'VII',sym:'🏆',kws:['victoria','determinación','control','movimiento'],
+   desc:'El Carro avanza con fuerza de voluntad hacia la victoria. Requiere disciplina, pero la dirección está clara y el éxito es posible.',
+   msgs:{amor:'La relación necesita dirección y esfuerzo consciente. No esperés que las cosas se resuelvan solas.',trabajo:'El éxito está al alcance si mantenés el enfoque. No te desvíes.',decision:'Tomá el control y avanzá. La inacción es la única derrota posible ahora.',general:'Periodo de avance y logros. Tu determinación está siendo puesta a prueba.',energia:'Energía de movimiento y conquista. No desperdicies este impulso.',salud:'La disciplina en tus hábitos te llevará lejos. El esfuerzo vale.'}},
+  {id:8,name:'La Fuerza',roman:'VIII',sym:'🦁',kws:['coraje','compasión','paciencia','dominio interior'],
+   desc:'La Fuerza no es la del músculo sino la del corazón. Domar la fiera interior con amor es más poderoso que cualquier enfrentamiento.',
+   msgs:{amor:'Las relaciones difíciles se transforman con paciencia y compasión, no con control.',trabajo:'Tu perseverancia silenciosa está construyendo algo sólido. Seguí adelante.',decision:'La decisión correcta requiere valentía y amor propio al mismo tiempo.',general:'Tenés más fuerza interior de la que creés. Esta carta lo confirma.',energia:'Energía suave pero poderosa. El día pide delicadeza y firmeza a la vez.',salud:'La sanación viene de un lugar de amor hacia vos misma, no de castigo.'}},
+  {id:9,name:'El Ermitaño',roman:'IX',sym:'🕯',kws:['introspección','soledad creativa','sabiduría','guía'],
+   desc:'El Ermitaño ilumina su propio camino con una antorcha. Invita al retiro, la reflexión y la conexión con la sabiduría que ya está dentro.',
+   msgs:{amor:'Un tiempo de reflexión individual es necesario antes de profundizar la relación.',trabajo:'La respuesta que buscás llega en el silencio, no en la actividad frenética.',decision:'Retirarte un momento para pensar con claridad es la mejor estrategia.',general:'Un período de introspección productiva. La soledad elegida es diferente a la soledad sufrida.',energia:'Día para estar en silencio. Evitá el ruido innecesario.',salud:'Tu sistema nervioso pide quietud. Honrá esa necesidad sin culpa.'}},
+  {id:10,name:'La Rueda de la Fortuna',roman:'X',sym:'☸',kws:['ciclos','karma','oportunidad','cambio'],
+   desc:'La Rueda gira constantemente. Lo que sube baja, y lo que está abajo pronto volverá a subir. Nada es permanente, todo es ciclo.',
+   msgs:{amor:'La relación está en un punto de cambio. Fluí con el ciclo en lugar de resistirlo.',trabajo:'Un ciclo se cierra y otro comienza. Las oportunidades que llegan ahora son significativas.',decision:'El momento es favorable. El viento está a tu favor.',general:'Estás en un punto de inflexión. Los cambios que vienen son parte de un ciclo mayor.',energia:'El día trae sorpresas. Mantenete abierta y flexible.',salud:'Los ciclos del cuerpo son naturales. Trabajá a favor de ellos, no en su contra.'}},
+  {id:11,name:'La Justicia',roman:'XI',sym:'⚖',kws:['equilibrio','verdad','causa y efecto','claridad'],
+   desc:'La Justicia pesa cada acción con precisión. Recuerda que todo tiene una consecuencia, y que la honestidad es la base de cualquier equilibrio verdadero.',
+   msgs:{amor:'La relación necesita honestidad y equidad. ¿Das y recibís por igual?',trabajo:'Actuá con integridad. Las consecuencias de tus decisiones serán proporcionales a tu honestidad.',decision:'Sopesá los hechos con claridad. La decisión justa es también la más sostenible.',general:'Un período de ajuste kármico. Lo que sembraste está dando sus frutos.',energia:'Día para ser honesta con vos misma. Sin autoengaños.',salud:'El equilibrio en todos los planos — mental, físico, emocional — es la clave.'}},
+  {id:12,name:'El Colgado',roman:'XII',sym:'🌿',kws:['rendición','perspectiva nueva','pausa','sacrificio'],
+   desc:'El Colgado cuelga voluntariamente, y en esa pausa encuentra una perspectiva que nadie más puede ver. La rendición es a veces el acto más poderoso.',
+   msgs:{amor:'Soltar el control de la relación puede abrir una puerta que el esfuerzo tenía cerrada.',trabajo:'Una pausa estratégica puede revelar soluciones que la acción constante ocultaba.',decision:'Esperá antes de actuar. Hay información que aún no llegó.',general:'Un período de transición. Lo que parece estancamiento es en realidad transformación.',energia:'Día de baja energía que tiene su propia sabiduría. Descansá.',salud:'El descanso no es derrota. Es parte del proceso de sanación.'}},
+  {id:13,name:'La Muerte',roman:'XIII',sym:'🦋',kws:['transformación','cierre','renacimiento','transición'],
+   desc:'La Muerte en el tarot raramente es física: es el fin de una etapa que abre espacio para una versión nueva y más auténtica de vos.',
+   msgs:{amor:'Una versión de la relación —o de vos en ella— debe terminar para que algo mejor nazca.',trabajo:'Un ciclo laboral está cerrando. No lo retrases: el nuevo capítulo es mejor.',decision:'Elegí el final que libera, aunque duela. Los cierres son también comienzos.',general:'Algo está muriendo en tu vida. Dejalo ir. Lo que viene es más genuino.',energia:'Energía de transformación profunda. Día para dejar ir.',salud:'Soltar patrones viejos y poco saludables es parte de sanar.'}},
+  {id:14,name:'La Templanza',roman:'XIV',sym:'⟡',kws:['equilibrio','moderación','paciencia','armonía'],
+   desc:'La Templanza mezcla opuestos con maestría. Representa la alquimia de encontrar el camino del medio, sin extremos que agoten.',
+   msgs:{amor:'La relación florece cuando hay equilibrio entre dar y recibir, entre espacio y cercanía.',trabajo:'La moderación y la paciencia producen resultados más sólidos que la prisa.',decision:'La solución está en el equilibrio, no en los extremos.',general:'Un período de integración y armonía. Las piezas están encontrando su lugar.',energia:'Día tranquilo y equilibrado. Cuidá tu energía con moderación.',salud:'La salud se construye con hábitos sostenibles, no con cambios drásticos.'}},
+  {id:15,name:'El Diablo',roman:'XV',sym:'⛓',kws:['apego','ilusión','liberación','sombra'],
+   desc:'El Diablo muestra las cadenas que usamos por voluntad propia. La buena noticia: son más fáciles de quitar de lo que parecen.',
+   msgs:{amor:'¿Estás en esta relación por amor o por miedo a la soledad? La honestidad libera.',trabajo:'Un patrón que te limita está siendo señalado. ¿Qué es lo que no podés soltar?',decision:'Examiná si tu decisión viene de un deseo genuino o de un miedo disfrazado.',general:'Algo te tiene atada innecesariamente. Identificalo y elegí conscientemente.',energia:'Día para ser honesta sobre tus apegos y hábitos.',salud:'Los patrones autodestructivos necesitan ser vistos, no ignorados.'}},
+  {id:16,name:'La Torre',roman:'XVI',sym:'⚡',kws:['revelación','caída','ruptura','verdad'],
+   desc:'La Torre cae porque estaba construida sobre bases falsas. Su caída, aunque dolorosa, es la condición para construir algo verdadero.',
+   msgs:{amor:'Una verdad que se ocultó está a punto de salir a la luz. Mejor que llegue ahora.',trabajo:'Un cambio abrupto que parece catástrofe puede ser la mejor cosa que te pasó.',decision:'No construyas más sobre cimientos débiles. A veces hay que empezar de nuevo.',general:'Una sacudida está limpiando lo que no era auténtico en tu vida.',energia:'Día de alta intensidad. Respirá, no reacciones impulsivamente.',salud:'El cuerpo a veces necesita una crisis para obligar el cambio que postergamos.'}},
+  {id:17,name:'La Estrella',roman:'XVII',sym:'★',kws:['esperanza','fe','inspiración','renovación'],
+   desc:'La Estrella brilla después de la tormenta. Trae esperanza genuina, no ilusión: la certeza de que el camino continúa hacia la luz.',
+   msgs:{amor:'El amor que soñás es posible. La esperanza no es ingenuidad, es una fuerza.',trabajo:'Un período de inspiración y renovación. Las ideas fluyen con facilidad.',decision:'Elegí la opción que te llena de esperanza, no de miedo.',general:'Estás saliendo de un período difícil. La luz al final del túnel es real.',energia:'Energía de esperanza y renovación. Día para soñar y planificar.',salud:'La recuperación está en marcha. Confiá en el proceso.'}},
+  {id:18,name:'La Luna',roman:'XVIII',sym:'☽',kws:['ilusión','subconsciente','miedos','sueños'],
+   desc:'La Luna ilumina con luz reflejada, creando sombras que distorsionan la realidad. Invita a distinguir entre el miedo real y el imaginado.',
+   msgs:{amor:'No todo lo que percibís en la relación es lo que parece. Buscá la verdad con calma.',trabajo:'Las dudas y los miedos pueden estar exagerando la dificultad real. Chequeá los hechos.',decision:'Los miedos están nublando tu juicio. Esperá más claridad antes de actuar.',general:'Un período de confusión que pide paciencia. La claridad llega con la aurora.',energia:'Prestá atención a tus sueños esta noche. Hay mensajes del inconsciente.',salud:'La ansiedad y los miedos inconscientes tienen impacto físico. Hablalo.'}},
+  {id:19,name:'El Sol',roman:'XIX',sym:'☀',kws:['alegría','éxito','claridad','vitalidad'],
+   desc:'El Sol trae alegría sin complicaciones, éxito genuino y la certeza de que todo está bien. Es la carta más luminosa del mazo.',
+   msgs:{amor:'La relación está en un momento de alegría y claridad. Celebralo.',trabajo:'El éxito es claro y merecido. Brillá sin pedir perdón.',decision:'La respuesta es sí. Las condiciones son favorables.',general:'Un período de alegría, logros y vitalidad. Uno de los mejores momentos.',energia:'Energía altísima. Día para todo lo que hayas postergado.',salud:'Vitalidad y bienestar. Tu cuerpo está en su mejor momento.'}},
+  {id:20,name:'El Juicio',roman:'XX',sym:'📯',kws:['llamado','despertar','redención','evaluación'],
+   desc:'El Juicio es el llamado a despertar. Un momento de revisión honesta de quién eras y quién querés ser, sin condena sino con compasión.',
+   msgs:{amor:'Es momento de hacer un balance honesto de la relación. ¿Te acerca a quien querés ser?',trabajo:'Un llamado a reinventarte profesionalmente está llegando. ¿Lo escuchás?',decision:'Evaluá desde quién sos ahora, no desde quien eras antes.',general:'Un momento de despertar y redención personal. Perdonarte es parte del proceso.',energia:'Día de evaluación y renacimiento personal.',salud:'Sanarte también implica perdonarte. El cuerpo guarda lo que la mente no soltó.'}},
+  {id:21,name:'El Mundo',roman:'XXI',sym:'🌍',kws:['completitud','logro','integración','celebración'],
+   desc:'El Mundo representa la completitud de un ciclo. Es el logro, la integración y la celebración de un camino recorrido con plenitud.',
+   msgs:{amor:'La relación alcanza una nueva madurez e integración. Celebrá lo construido.',trabajo:'Un logro importante está llegando a su conclusión. El ciclo se completa.',decision:'La opción que te da sensación de completitud es la correcta.',general:'Un ciclo se completa exitosamente. Celebrá antes de comenzar el siguiente.',energia:'Energía de plenitud y celebración. Día para agradecer.',salud:'Un período de salud y bienestar integral. Sentirte entera es también sanación.'}}
+];
+
+const POSITIONS={
+  1:['Tu mensaje del momento'],
+  3:['Pasado','Presente','Futuro'],
+  5:['La situación','El desafío','El pasado','El consejo','El resultado']
+};
+
+// ============================================================
+// CARD IMAGES — maps arcana id → relative path
+// Place this HTML file next to a "cartas/" folder with the PNGs
+// ============================================================
+const CARD_IMAGES={
+  0:'cartas/00-TheFool.png',
+  1:'cartas/01-TheMagician.png',
+  2:'cartas/02-TheHighPriestess.png',
+  3:'cartas/03-TheEmpress.png',
+  4:'cartas/04-TheEmperor.png',
+  5:'cartas/05-TheHierophant.png',
+  6:'cartas/06-TheLovers.png',
+  7:'cartas/07-TheChariot.png',
+  8:'cartas/08-Strength.png',
+  9:'cartas/09-TheHermit.png',
+  10:'cartas/10-WheelOfFortune.png',
+  11:'cartas/11-Justice.png',
+  12:'cartas/12-TheHangedMan.png',
+  13:'cartas/13-Death.png',
+  14:'cartas/14-Temperance.png',
+  15:'cartas/15-TheDevil.png',
+  16:'cartas/16-TheTower.png',
+  17:'cartas/17-TheStar.png',
+  18:'cartas/18-TheMoon.png',
+  19:'cartas/19-TheSun.png',
+  20:'cartas/20-Judgement.png',
+  21:'cartas/21-TheWorld.png'
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let situation='amor';
+let spreadN=1;
+let cards=[];          // selected ARCANA objects
+let shuffles=0;
+let revealed=-1;       // index of last revealed card (-1 = none)
+let journalData=[];
+
+try{ journalData=JSON.parse(localStorage.getItem('tv_journal')||'[]'); }catch(e){}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  // scroll to top of the new screen
+  document.getElementById(id).scrollTop=0;
+}
+function hideNav(){document.getElementById('bottomNav').style.display='none'}
+function showNav(){document.getElementById('bottomNav').style.display='flex'}
+function setNav(key){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={reading:'nv-reading',journal:'nv-journal',guide:'nv-guide'};
+  if(map[key]) document.getElementById(map[key]).classList.add('active');
+}
+function goNewReading(){
+  // reset everything
+  cards=[];shuffles=0;revealed=-1;
+  document.getElementById('shufflePhase').style.display='flex';
+  document.getElementById('revealPhase').style.display='none';
+  document.getElementById('interpPanel').innerHTML='';
+  document.getElementById('interpPanel').classList.remove('show');
+  document.getElementById('fullBtnWrap').style.display='none';
+  document.getElementById('fullReading').innerHTML='';
+  document.getElementById('fullReading').classList.remove('show');
+  document.getElementById('shuffleCount').textContent='';
+  // reset situation selection UI
+  document.querySelectorAll('.situation-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.situation-btn').classList.add('active');
+  situation='amor';
+  // reset spread selection UI
+  document.querySelectorAll('.spread-opt').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.spread-opt').classList.add('active');
+  spreadN=1;
+  goScreen('select-spread');
+  showNav();
+  setNav('reading');
+}
+
+// ============================================================
+// SELECT SITUATION / SPREAD
+// ============================================================
+function selectSit(btn,sit){
+  document.querySelectorAll('.situation-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  situation=sit;
+}
+function selectSpread(el,n){
+  document.querySelectorAll('.spread-opt').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  spreadN=n;
+}
+
+// ============================================================
+// START READING
+// ============================================================
+function startReading(){
+  const labels={amor:'Amor',trabajo:'Trabajo',decision:'Decisión',general:'Camino',energia:'Energía',salud:'Bienestar'};
+  document.getElementById('sitChip').textContent=labels[situation];
+  document.getElementById('shuffleCount').textContent='';
+  shuffles=0;
+  goScreen('reading');
+  setNav('reading');
+}
+
+// ============================================================
+// SHUFFLE
+// ============================================================
+function shuffleDeck(){
+  shuffles++;
+  const top=document.getElementById('deckTop');
+  top.classList.remove('shuffling');
+  void top.offsetWidth; // reflow to restart animation
+  top.classList.add('shuffling');
+
+  const msgs=['','Barajando...','Concentrá tu intención...','Las cartas sienten tu energía...','Listas para revelar...'];
+  document.getElementById('shuffleCount').textContent = msgs[Math.min(shuffles,msgs.length-1)];
+
+  if(shuffles>=3){
+    setTimeout(()=>{
+      setupReveal();
+    },680);
+  }
+}
+
+// ============================================================
+// SETUP REVEAL PHASE
+// ============================================================
+function setupReveal(){
+  // Pick unique random cards
+  const pool=[...Array(22).keys()];
+  cards=[];
+  for(let i=0;i<spreadN;i++){
+    const ri=Math.floor(Math.random()*pool.length);
+    cards.push(ARCANA[pool.splice(ri,1)[0]]);
+  }
+  revealed=-1;
+
+  // Build card elements
+  const row=document.getElementById('cardsRow');
+  row.innerHTML='';
+  const positions=POSITIONS[spreadN];
+
+  cards.forEach((card,i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:center';
+    wrap.style.animationDelay=`${i*0.08}s`;
+    wrap.classList.add('c-reveal');
+    const imgSrc=CARD_IMAGES[card.id];
+    const cardFace = imgSrc
+      ? `<img class="card-img" src="${imgSrc}" alt="${card.name}" loading="lazy">
+         <div class="card-strip">
+           <span class="card-roman">${card.roman}</span>
+           <span class="card-cname">${card.name}</span>
+         </div>`
+      : `<div class="card-art">
+           <div class="card-art-border"></div>
+           <span class="card-sym">${card.sym}</span>
+         </div>
+         <div class="card-strip" style="position:relative;background:rgba(0,0,0,0.45);border-top:1px solid var(--border)">
+           <span class="card-roman">${card.roman}</span>
+           <span class="card-cname">${card.name}</span>
+         </div>`;
+    wrap.innerHTML=`
+      <div class="tarot-card" id="tc-${i}" onclick="tapCard(${i})">
+        <div class="card-inner">
+          <div class="card-face card-back-f">✦</div>
+          <div class="card-face card-front-f">
+            ${cardFace}
+          </div>
+        </div>
+      </div>
+      <div class="pos-label">${positions[i]}</div>
+    `;
+    row.appendChild(wrap);
+  });
+
+  document.getElementById('tapHint').textContent='Tocá la primera carta ↑';
+  document.getElementById('shufflePhase').style.display='none';
+  document.getElementById('revealPhase').style.display='block';
+
+  // scroll reading screen to top
+  document.getElementById('reading').scrollTop=0;
+}
+
+// ============================================================
+// TAP CARD  ← THIS IS THE KEY FIXED FUNCTION
+// ============================================================
+function tapCard(i){
+  const cardEl=document.getElementById(`tc-${i}`);
+
+  // If already flipped: just show its interpretation again
+  if(cardEl.classList.contains('flipped')){
+    renderInterp(i);
+    return;
+  }
+
+  // FIX: only allow revealing cards in order (next card = revealed+1)
+  if(i !== revealed+1) return;
+
+  // Flip
+  cardEl.classList.add('flipped');
+  revealed=i;
+
+  // Show interpretation after flip animation
+  setTimeout(()=>{
+    renderInterp(i);
+
+    // Update tap hint
+    const remaining=cards.length-1-i;
+    if(remaining>0){
+      document.getElementById('tapHint').textContent=`Tocá la siguiente carta ↑`;
+    } else {
+      document.getElementById('tapHint').textContent='';
+      // All cards revealed — show full reading button
+      setTimeout(()=>{
+        document.getElementById('fullBtnWrap').style.display='block';
+        // scroll to show the button
+        document.getElementById('fullBtnWrap').scrollIntoView({behavior:'smooth',block:'nearest'});
+      },300);
+    }
+  },400);
+}
+
+// ============================================================
+// RENDER SINGLE CARD INTERPRETATION
+// ============================================================
+function renderInterp(i){
+  const card=cards[i];
+  const positions=POSITIONS[spreadN];
+  const msg=card.msgs[situation]||card.msgs.general;
+  const imgSrc=CARD_IMAGES[card.id];
+  const thumb=imgSrc
+    ? `<img src="${imgSrc}" alt="${card.name}" style="width:52px;height:91px;object-fit:cover;border-radius:6px;border:1px solid var(--border-bright);flex-shrink:0">`
+    : `<span class="ip-sym">${card.sym}</span>`;
+  const panel=document.getElementById('interpPanel');
+  panel.innerHTML=`
+    <div class="iph">
+      ${thumb}
+      <div class="ip-titles">
+        <div class="ip-pos">${positions[i]}</div>
+        <div class="ip-name">${card.roman} — ${card.name}</div>
+        <div class="ip-keys" style="margin-top:0.4rem">${card.kws.map(k=>`<span class="kw">${k}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="ip-div"></div>
+    <div class="ip-desc">${card.desc}</div>
+    <div class="ip-msg">${msg}</div>
+  `;
+  panel.classList.add('show');
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),150);
+}
+
+// ============================================================
+// FULL READING
+// ============================================================
+function showFullReading(){
+  const positions=POSITIONS[spreadN];
+  const blocks=cards.map((card,i)=>{
+    const msg=card.msgs[situation]||card.msgs.general;
+    const imgSrc=CARD_IMAGES[card.id];
+    const thumb=imgSrc
+      ? `<img src="${imgSrc}" alt="${card.name}" style="width:44px;height:77px;object-fit:cover;border-radius:5px;border:1px solid var(--border-bright);flex-shrink:0">`
+      : `<span class="crb-sym">${card.sym}</span>`;
+    return `<div class="crb">
+      <div class="crb-h">
+        ${thumb}
+        <div><div class="crb-pos">${positions[i]}</div><div class="crb-name">${card.roman} — ${card.name}</div></div>
+      </div>
+      <div class="crb-desc">${card.desc}</div>
+      <div class="crb-msg">${msg}</div>
+    </div>`;
+  }).join('');
+
+  const concl=buildConclusion();
+  const fr=document.getElementById('fullReading');
+  fr.innerHTML=`
+    <div class="fr-title">✦ Tu lectura completa ✦</div>
+    ${blocks}
+    <div class="conclusion">
+      <div class="concl-title">☽ El mensaje del conjunto ☽</div>
+      <div class="concl-text">${concl}</div>
+    </div>
+    <div class="action-btns">
+      <button class="ab ab-save" onclick="saveEntry()">☽ Guardar en mi diario</button>
+      <button class="ab ab-new" onclick="goNewReading()">Hacer otra lectura</button>
+    </div>
+  `;
+  fr.classList.add('show');
+  document.getElementById('fullBtnWrap').style.display='none';
+  // Auto-save silently
+  saveEntry(true);
+  setTimeout(()=>fr.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+function buildConclusion(){
+  const names=cards.map(c=>c.name).join(', ');
+  const positive=[1,3,6,7,10,14,17,19,21];
+  const posCount=cards.filter(c=>positive.includes(c.id)).length;
+  const tone=posCount>=Math.ceil(spreadN/2)?'favorable':'desafiante pero revelador';
+  const map={
+    amor:`Las cartas ${names} pintan un panorama ${tone} en el amor. Las cartas te piden presencia y honestidad. Lo que sentís es real; lo que necesitás ahora es el coraje de actuar desde ahí.`,
+    trabajo:`El conjunto de ${names} traza un camino ${tone} en tu trabajo. Tu habilidad y tu intuición están disponibles. El universo te respalda cuando actuás con integridad.`,
+    decision:`${names} hablan de un momento ${tone}. La respuesta que buscás ya está dentro tuyo. Las cartas sólo te ayudan a escucharla con más claridad.`,
+    general:`El viaje que trazan ${names} es ${tone}. Cada carta es un espejo de tu momento actual. Lo que ves en ellas es lo que ya sabés, pero aún no te animaste a decirte.`,
+    energia:`Tu energía de hoy, según ${names}, es ${tone}. Usá lo que estas cartas te muestran para navegar el día con más consciencia y menos reactividad.`,
+    salud:`${names} hablan de un proceso ${tone} en tu bienestar. El cuerpo, la mente y el alma están conectados. Lo que sana uno, sana a los otros.`
+  };
+  return map[situation]||map.general;
+}
+
+// ============================================================
+// JOURNAL
+// ============================================================
+function saveEntry(silent=false){
+  if(!cards.length) return;
+  const labels={amor:'Amor',trabajo:'Trabajo',decision:'Decisión',general:'Camino general',energia:'Energía',salud:'Bienestar'};
+  const positions=POSITIONS[spreadN];
+  const entry={
+    date:new Date().toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'}),
+    situation:labels[situation],
+    cards:cards.map((c,i)=>({pos:positions[i],name:c.name,sym:c.sym}))
+  };
+  // avoid duplicate saves
+  const first=journalData[0];
+  const isDupe=first&&first.situation===entry.situation&&first.cards.map(c=>c.name).join()==entry.cards.map(c=>c.name).join();
+  if(isDupe&&silent) return;
+
+  journalData.unshift(entry);
+  if(journalData.length>40) journalData=journalData.slice(0,40);
+  try{localStorage.setItem('tv_journal',JSON.stringify(journalData));}catch(e){}
+  if(!silent) showToast('Guardado en tu diario ☽');
+}
+
+function renderJournal(){
+  const el=document.getElementById('journalContent');
+  if(!journalData.length){
+    el.innerHTML=`<div class="j-empty"><span class="ei">☽</span><p>Tus lecturas aparecerán aquí<br>después de tu primera tirada</p></div>`;
+    return;
+  }
+  el.innerHTML=journalData.map(e=>`
+    <div class="j-entry">
+      <div class="je-date">${e.date}</div>
+      <div class="je-sit">${e.situation}</div>
+      <div class="je-cards">${e.cards.map(c=>`<span class="je-card">${c.sym} ${c.name}</span>`).join('')}</div>
+    </div>
+  `).join('')+`<button class="j-clear-btn" onclick="clearJournal()">Borrar historial</button>`;
+}
+
+function clearJournal(){
+  if(!confirm('¿Borrar todas las lecturas guardadas?')) return;
+  journalData=[];
+  try{localStorage.removeItem('tv_journal');}catch(e){}
+  renderJournal();
+  showToast('Diario borrado');
+}
+
+// ============================================================
+// GUIDE
+// ============================================================
+function buildGuide(){
+  const list=document.getElementById('arcList');
+  list.innerHTML=ARCANA.map(a=>{
+    const imgSrc=CARD_IMAGES[a.id];
+    const thumb=imgSrc
+      ? `<img src="${imgSrc}" alt="${a.name}" style="width:42px;height:74px;object-fit:cover;border-radius:5px;border:1px solid var(--border);flex-shrink:0">`
+      : `<div class="arc-sym">${a.sym}</div>`;
+    return `
+    <div class="arc-item" onclick="this.classList.toggle('open')">
+      ${thumb}
+      <div class="arc-main">
+        <div class="arc-row">
+          <span class="arc-name">${a.roman} — ${a.name}</span>
+          <span class="arc-chev">▼</span>
+        </div>
+        <div class="arc-kws">${a.kws.slice(0,3).join(' · ')}</div>
+        <div class="arc-desc">${a.desc}<br><br><em style="color:var(--gold-dim)">Mensaje general: </em>${a.msgs.general}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ============================================================
+// STARS
+// ============================================================
+function initStars(){
+  const c=document.getElementById('starsEl');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2+0.8;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3+2).toFixed(1)}s;--min:${(Math.random()*0.2).toFixed(2)};--max:${(Math.random()*0.5+0.4).toFixed(2)};animation-delay:${(Math.random()*4).toFixed(1)}s`;
+    c.appendChild(s);
+  }
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+initStars();
+buildGuide();
+goScreen('home');
+hideNav();
+</script>
+</body>
+</html>
